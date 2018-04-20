@@ -15,7 +15,7 @@ Azure Global Bootcamp presentation and code samples
 2. func host start
 
 #### Publish
-1. Create FunctionApp in Azure Portal or Azure CLI
+1. Create FunctionApp in Azure Portal or Azure CLI (using BETA 2.x runtime)
 2. Get Subscription List (func azure subscriptions list)
 3. Set Subscription (func azure subscriptions set [GUID])
 4. Get FunctionApp List (func azure functionapp list)

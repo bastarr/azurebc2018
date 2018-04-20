@@ -12,8 +12,6 @@ public static IActionResult Run(HttpRequest req, string id, TraceWriter log)
 {
     log.Info("C# HTTP trigger function processed a request.");
 
-    //string id = req.Query["id"];
-
     var person = GetPerson(id);
 
     return person != null
@@ -26,19 +24,21 @@ private static Person GetPerson(string id)
     string baseUri = "https://swapi.co/api";
 
     Person returnValues = new Person();
-    HttpClient client = new HttpClient();
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, String.Format("{0}/people/{1}", baseUri, id));
-    HttpResponseMessage response = client.SendAsync(request).Result;
-
-    if (response.IsSuccessStatusCode)
+    using(HttpClient client = new HttpClient())
     {
-        string result = response.Content.ReadAsStringAsync().Result;
-        if (!String.IsNullOrEmpty(result))
-            returnValues = JsonConvert.DeserializeObject<Person>(result);
-    }
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, String.Format("{0}/people/{1}", baseUri, id));
+        HttpResponseMessage response = client.SendAsync(request).Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            string result = response.Content.ReadAsStringAsync().Result;
+            if (!String.IsNullOrEmpty(result))
+                returnValues = JsonConvert.DeserializeObject<Person>(result);
+        }
+    }
     return returnValues;
 }
 
